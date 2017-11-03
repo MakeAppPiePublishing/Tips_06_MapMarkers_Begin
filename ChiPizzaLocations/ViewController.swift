@@ -7,12 +7,52 @@
 //
 
 import UIKit
+import MapKit
 
-class ViewController: UIViewController {
 
+class ViewController: UIViewController, MKMapViewDelegate {
+    let pizzaAnnotations = PizzaAnnotations()
+    let initialCoordinate = CLLocationCoordinate2DMake(41.9180474,-87.661767)
+    @IBOutlet weak var mapView: MKMapView!
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        var annotationView = MKPinAnnotationView()
+        guard let annotation = annotation as? PizzaAnnotation else {return nil}
+        var identifier = ""
+        var color = UIColor.red
+        switch annotation.type{
+        case .deepDish:
+            identifier = "Deep Dish"
+            color = .red
+        case .potPie:
+            identifier = "Pot pie"
+            color = .black
+        case .thin:
+            identifier = "Thin crust"
+            color = .yellow
+        }
+        if let dequedView = mapView.dequeueReusableAnnotationView(
+            withIdentifier: identifier)
+            as? MKPinAnnotationView {
+            annotationView = dequedView
+        } else{
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        annotationView.pinTintColor = color
+        return annotationView
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        mapView.delegate = self
+        //set intial region
+        let initialregion = MKCoordinateRegion(center: initialCoordinate, span: MKCoordinateSpanMake(0.25, 0.25))
+        mapView.setRegion(initialregion, animated: true)
+        // add the annotations
+        mapView.addAnnotations(pizzaAnnotations.restaurants)
+        
     }
 
     override func didReceiveMemoryWarning() {
