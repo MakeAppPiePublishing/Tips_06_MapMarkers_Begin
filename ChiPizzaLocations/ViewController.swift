@@ -29,7 +29,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
             color = .black
         case .thin:
             identifier = "Thin crust"
-            color = .yellow
+            color = .blue
         }
         if let dequedView = mapView.dequeueReusableAnnotationView(
             withIdentifier: identifier)
@@ -52,9 +52,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         mapView.setRegion(initialregion, animated: true)
         // add the annotations
         mapView.addAnnotations(pizzaAnnotations.restaurants)
-        
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
